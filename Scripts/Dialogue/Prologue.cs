@@ -60,6 +60,7 @@ public class Prologue : MonoBehaviour
     {
         isTalking = true;
 
+        //Inspector에서 입력받은 대사와 Sprite 데이터들 불러오기 
         for (int i = 0; m_Dialogue.Sentences.Length > i; i++)
             m_Sentences.Add(m_Dialogue.Sentences[i]);
 
@@ -88,8 +89,11 @@ public class Prologue : MonoBehaviour
 
         if (0 < m_Count)
         {
+            //대사 string의 맨 첫번째 char는 캐릭터 sprite 구별용 flag
+            //0: 할아버지 1: 주인공 
             int imageIndex = m_Sentences[m_Count][0] - '0';
 
+            //첫번째 char로 출력할 캐릭터 sprite를 구별한 다음 
             m_CharacterImg.sprite = m_Sprites[imageIndex];
 
             yield return new WaitForSeconds(0.1f);
@@ -97,6 +101,7 @@ public class Prologue : MonoBehaviour
         else
             m_CharacterImg.sprite = m_Sprites[0];
 
+        //string의 0번째 인덱스는 제외하고 1번째 인덱스부터 출력한다 
         StringBuilder sb = new StringBuilder();
         for (int i = 1; m_Sentences[m_Count].Length > i; i++)
         {
@@ -111,12 +116,15 @@ public class Prologue : MonoBehaviour
 
     private void ShowDialogueToTheEnd()
     {
+        //대사가 출력되는 중간에 입력이 들어오면 해당 대사를 끝까지 모두 출력한다.
+        //string의 0번째는 캐릭터 sprite 구분 flag이기 때문에 1번째부터 출력 
         m_Text.text = m_Sentences[m_Count].Substring(1);
         DialogueIsEnd = true;
     }
 
     private IEnumerator LoadPlayScene()
     {
+        //black out 후 다음 씬 로드 
         float alpha = m_BlackInPanel.color.a;
         while (1 > alpha)
         {

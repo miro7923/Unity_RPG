@@ -6,6 +6,7 @@ static class Constants
     public const int CountOfBoss = 3;
     public const int MonCountMax = 20;
     public const float AddHealth = 100;
+    public const int NoneSelected = -1;
 }
 
 public struct MonsterStatus //몬스터 능력치 저장용 구조체 

@@ -195,7 +195,7 @@ public class Shop : MonoBehaviour
         //최대 3자리수까지만 입력을 받는다 
         if (3 < m_sbItemQuantity.Length)
         {
-            //만약 3자리수를 초과하는 입력이 들어오면 나머지 입력 무시 후 입력 제한값(999)으로 변경 
+            //만약 3자리수를 초과하는 입력이 들어오면 나머지 입력 무시 및 입력 제한값(999)으로 변경 
             m_sbItemQuantity.Clear();
             m_sbItemQuantity.Append("999");
         }
@@ -230,7 +230,7 @@ public class Shop : MonoBehaviour
         //구매/판매 하려는 아이템 종류에 따라서 다른 UI 출력
         switch (m_isBuy)
         {
-            case true:
+            case true: //구매 
                 m_QuantityPopupTxt.text = "몇 개 구매 하시겠어요?";
                 m_ConfirmPopupTxt.text = "정말 구매 하시겠어요?";
 
@@ -247,7 +247,7 @@ public class Shop : MonoBehaviour
                     m_Popup_ConfirmToAction.SetActive(true);
                 }
                 break;
-            case false:
+            case false: //판매 
                 m_QuantityPopupTxt.text = "몇 개 판매 하시겠어요?";
                 m_ConfirmPopupTxt.text = "정말 판매 하시겠어요?";
 
@@ -269,7 +269,6 @@ public class Shop : MonoBehaviour
     public void BuyItem()
     {
         //button 클릭하면 호출
-        //현재 선택된 인덱스의 무기 이름을 넘겨준다.
         //player 소지금 줄이고 gold txt 업데이트 
 
         //가진 돈이 충분하면 아이템을 살 수 있고 아니라면 예외 팝업 출력 
@@ -279,13 +278,16 @@ public class Shop : MonoBehaviour
             return;
         }
 
+        //아이템 가격만큼 플레이어가 소지한 gold 차감 
         PlayerState.GetInstance.BuyItem(m_CurItems[m_SlotIndex].Price * m_iItemQuantity);
 
+        //구매하고자 하는 아이템이 물약이라면 수량을 증가시키거나 물약을 가지고 있지 않았다면 배열에 새로 추가 
         if (m_CurItems[0].Type.Equals("Item"))
             PlayerState.GetInstance.AddItemInInvevtory(m_CurItems[m_SlotIndex], m_iItemQuantity, true);
-        else
+        else //무기라면 배열에 새로 추가 
             PlayerState.GetInstance.AddItemInInvevtory(m_CurItems[m_SlotIndex], m_iItemQuantity, false);
 
+        //인벤토리 목록 갱신 
         m_Inventory.LoadItemList();
 
         //구매가 끝나면 기본 구매 갯수 1로 초기화 및 각종 팝업 닫기
@@ -306,7 +308,6 @@ public class Shop : MonoBehaviour
         //button 클릭하면 호출
         //플레이어가 가진 아이템 배열에서 해당 아이템을 삭제하고 그만큼 돈 증가
         //판매 금액은 원래 가격의 30%
-        //판매 후 아이템 재배치
 
         if (0 < m_Inventory.SelectedItemIndex)
         {
@@ -337,6 +338,7 @@ public class Shop : MonoBehaviour
                     return;
                 }
 
+                //물약 종류는 남은 수량에 따라 수량을 감소시키거나 소지 아이템 배열에서 삭제 
                 PlayerState.GetInstance.RemoveItemInInventory(m_Inventory.SelectedItemIndex, m_iItemQuantity);
 
                 sellingPrice = healthPack.Price * 0.3f * m_iItemQuantity;
@@ -353,7 +355,7 @@ public class Shop : MonoBehaviour
         }
         else
         {
-            //m_Inventory.SelectedItemIndex의 초기값은 -1 => 아무 아이템을 선택하지 않은 경우 
+            //m_Inventory.SelectedItemIndex의 초기값은 Constants.NoneSelected(-1) => 아무 아이템을 선택하지 않은 경우 
             //아이템을 선택해 주세요 출력
             m_Popup_PleaseChoose.SetActive(true);
         }

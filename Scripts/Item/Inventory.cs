@@ -12,7 +12,7 @@ public class Inventory : MonoBehaviour
     [SerializeField] private Sprite m_DefaultSlotImg;
     [SerializeField] private GameObject m_CountTextPrefab; //아이템 갯수 표시할 텍스트 프리펩 
     private int m_SlotIndex = 0; //몇 번째 슬롯에 이미지를 표시할 지 판단할 인덱스 값
-    public int SelectedItemIndex { get; private set; } = -1; //몇 번째 슬롯에 있는 아이템이 선택되었는지 확인할 인덱스 값
+    public int SelectedItemIndex { get; private set; } = Constants.NoneSelected; //몇 번째 슬롯에 있는 아이템이 선택되었는지 확인할 인덱스 값
 
     [SerializeField] private Text m_InventoryTxt; //플레이어 소지품 정보를 보여줄 텍스트
 
