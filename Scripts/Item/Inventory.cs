@@ -140,6 +140,11 @@ public class Inventory : MonoBehaviour
         }
     }
 
+    public void ClearInfoTxt()
+    {
+        m_InventoryTxt.text = "";
+    }
+
     public void ChangeWeapon(bool inPlayScene)
     {
         //플레이어가 소지한 아이템 내에서 무기를 바꾼 후
@@ -150,5 +155,7 @@ public class Inventory : MonoBehaviour
         //상점에서 교체가 실행되면 그림만 바꾸고 실제 무기 오브젝트 교체는 플레이 신이 로드되면 init 함수를 통해 처리 한다.
         if (inPlayScene)
             WeaponManager.GetInstance.SetWeapon();
+
+        ClearInfoTxt();
     }
 }

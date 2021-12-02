@@ -186,14 +186,21 @@ public class Shop : MonoBehaviour
 
     public void GetQuantity(int num)
     {
-        if (3 > m_sbItemQuantity.Length)
-        {
-            if (0 == m_sbItemQuantity.Length && 0 == num)
-                return;
+        //입력된 숫자가 없는데 맨 첫 숫자로 0이 입력되었을 때 예외처리 
+        if (0 == m_sbItemQuantity.Length && 0 == num)
+            return;
 
-            m_sbItemQuantity.Append(num);
-            m_QuantityTxt.text = m_sbItemQuantity.ToString();
+        m_sbItemQuantity.Append(num);
+
+        //최대 3자리수까지만 입력을 받는다 
+        if (3 < m_sbItemQuantity.Length)
+        {
+            //만약 3자리수를 초과하는 입력이 들어오면 나머지 입력 무시 후 입력 제한값(999)으로 변경 
+            m_sbItemQuantity.Clear();
+            m_sbItemQuantity.Append("999");
         }
+
+        m_QuantityTxt.text = m_sbItemQuantity.ToString();
     }
 
     public void UndoQuantity()
@@ -208,6 +215,12 @@ public class Shop : MonoBehaviour
     public void ConfirmQuantity()
     {
         m_iItemQuantity = int.Parse(m_QuantityTxt.text);
+    }
+
+    public void ClearQuantity()
+    {
+        m_sbItemQuantity.Clear();
+        m_QuantityTxt.text = "";
     }
 
     public void PopupUI(bool isBuy)
@@ -282,8 +295,7 @@ public class Shop : MonoBehaviour
     private void InitPopups()
     {
         m_iItemQuantity = 1;
-        m_QuantityTxt.text = "";
-        m_sbItemQuantity.Clear();
+        ClearQuantity();
         m_Popup_ConfirmToAction.SetActive(false);
         m_Popup_Quantity.SetActive(false);
         m_Keypad.SetActive(false);
@@ -347,6 +359,7 @@ public class Shop : MonoBehaviour
         }
 
         InitPopups();
+        m_Inventory.ClearInfoTxt();
     }
 
     public void LoadPlayScene()

@@ -16,8 +16,8 @@ public class Prologue : MonoBehaviour
 
     private int m_Count = 0; //현재 출력할 대사 위치 
 
-    private bool isTalking = false; //
-    private bool DialogueIsEnd = false;
+    private bool isTalking = false; //현재 대화가 진행되고 있는지 확인할 변수 
+    private bool DialogueIsEnd = false; //현재 출력중인 대사가 끝까지 출력되었는지 확인할 변수 
 
     [SerializeField] private Image m_BlackInPanel;
 
@@ -61,10 +61,10 @@ public class Prologue : MonoBehaviour
         isTalking = true;
 
         for (int i = 0; m_Dialogue.Sentences.Length > i; i++)
-        {
             m_Sentences.Add(m_Dialogue.Sentences[i]);
+
+        for (int i = 0; m_Dialogue.Sprites.Length > i; i++)
             m_Sprites.Add(m_Dialogue.Sprites[i]);
-        }
 
         StartCoroutine(DialogueCoroutine());
     }
@@ -88,20 +88,17 @@ public class Prologue : MonoBehaviour
 
         if (0 < m_Count)
         {
-            if (m_Sprites[m_Count] != m_Sprites[m_Count - 1])
-            {
-                m_CharacterImg.sprite = m_Sprites[m_Count];
+            int imageIndex = m_Sentences[m_Count][0] - '0';
 
-                yield return new WaitForSeconds(0.1f);
-            }
-            else
-                yield return new WaitForSeconds(0.05f);
+            m_CharacterImg.sprite = m_Sprites[imageIndex];
+
+            yield return new WaitForSeconds(0.1f);
         }
         else
-            m_CharacterImg.sprite = m_Sprites[m_Count];
+            m_CharacterImg.sprite = m_Sprites[0];
 
         StringBuilder sb = new StringBuilder();
-        for (int i = 0; m_Sentences[m_Count].Length > i; i++)
+        for (int i = 1; m_Sentences[m_Count].Length > i; i++)
         {
             sb.Append(m_Sentences[m_Count][i]);
             m_Text.text = sb.ToString();
@@ -114,7 +111,7 @@ public class Prologue : MonoBehaviour
 
     private void ShowDialogueToTheEnd()
     {
-        m_Text.text = m_Sentences[m_Count];
+        m_Text.text = m_Sentences[m_Count].Substring(1);
         DialogueIsEnd = true;
     }
 

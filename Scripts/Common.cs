@@ -2,7 +2,7 @@
 static class Constants
 {
     public const int MaxWave = 3;
-    public const int MaxKill = 1;
+    public const int MaxKill = 2;
     public const int CountOfBoss = 3;
     public const int MonCountMax = 20;
     public const float AddHealth = 100;
